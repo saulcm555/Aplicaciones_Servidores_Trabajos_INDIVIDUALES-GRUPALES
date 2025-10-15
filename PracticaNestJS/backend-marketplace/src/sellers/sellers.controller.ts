@@ -1,11 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { SellersService } from './sellers.service';
+import { InventoriesService } from '../inventories/inventories.service';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 
 @Controller('sellers')
 export class SellersController {
-  constructor(private readonly sellersService: SellersService) {}
+  constructor(
+    private readonly sellersService: SellersService,
+    private readonly inventoriesService: InventoriesService,
+  ) {}
 
   @Post()
   create(@Body() createSellerDto: CreateSellerDto) {
@@ -20,6 +24,11 @@ export class SellersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sellersService.findOne(+id);
+  }
+
+  @Get(':id/inventory')
+  findInventory(@Param('id') id: string) {
+    return this.inventoriesService.findBySeller(+id);
   }
 
   @Patch(':id')

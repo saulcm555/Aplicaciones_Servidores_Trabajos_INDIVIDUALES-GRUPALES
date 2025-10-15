@@ -1,20 +1,26 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, OneToMany } from 'typeorm';
 import { ProductCart } from '../../product-carts/entities/product-cart.entity';
 import { ProductOrder } from '../../product-orders/entities/product-order.entity';
+import { Seller } from '../../sellers/entities/seller.entity';
+import { Category } from '../../categories/entities/category.entity';
+import { SubCategory } from '../../categories/entities/sub-category.entity';
 
 @Entity('product')
 export class Product {
   @PrimaryGeneratedColumn('increment', { name: 'id_product' })
   id_product: number;
 
-  @Column({ name: 'id_seller', type: 'int', nullable: true })
-  id_seller: number;
+  @ManyToOne(() => Seller, (seller) => seller.products, { nullable: true })
+  @JoinColumn({ name: 'id_seller' })
+  seller: Seller;
 
-  @Column({ name: 'id_category', type: 'int', nullable: true })
-  id_category: number;
+  @ManyToOne(() => Category, { nullable: true })
+  @JoinColumn({ name: 'id_category' })
+  category: Category;
 
-  @Column({ name: 'id_sub_category', type: 'int', nullable: true })
-  id_sub_category: number;
+  @ManyToOne(() => SubCategory, { nullable: true })
+  @JoinColumn({ name: 'id_sub_category' })
+  subCategory: SubCategory;
 
   @Column({ name: 'product_name', type: 'varchar', length: 255 })
   product_name: string;

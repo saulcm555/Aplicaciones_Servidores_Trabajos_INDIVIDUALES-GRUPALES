@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
+import { Seller } from './entities/seller.entity';
 
 @Injectable()
 export class SellersService {
-  create(createSellerDto: CreateSellerDto) {
-    return 'This action adds a new seller';
+  constructor(
+    @InjectRepository(Seller)
+    private readonly sellerRepository: Repository<Seller>,
+  ) {}
+
+  async create(createSellerDto: CreateSellerDto) {
+    const seller = this.sellerRepository.create(createSellerDto as any);
+    return await this.sellerRepository.save(seller);
   }
 
-  findAll() {
-    return `This action returns all sellers`;
+  async findAll() {
+    return await this.sellerRepository.find({ relations: ['inventories', 'products'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} seller`;
+  async findOne(id: number) {
+    const seller = await this.sellerRepository.findOne({ where: { id_seller: id }, relations: ['inventories', 'products'] });
+    if (!seller) throw new NotFoundException(`Seller with id ${id} not found`);
+    return seller;
   }
 
-  update(id: number, updateSellerDto: UpdateSellerDto) {
-    return `This action updates a #${id} seller`;
+  async update(id: number, updateSellerDto: UpdateSellerDto) {
+    const seller = await this.sellerRepository.preload({ id_seller: id, ...(updateSellerDto as any) });
+    if (!seller) throw new NotFoundException(`Seller with id ${id} not found`);
+    return await this.sellerRepository.save(seller);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} seller`;
+  async remove(id: number) {
+    const seller = await this.sellerRepository.findOne({ where: { id_seller: id } });
+    if (!seller) throw new NotFoundException(`Seller with id ${id} not found`);
+    await this.sellerRepository.remove(seller);
+    return { deleted: true };
   }
 }

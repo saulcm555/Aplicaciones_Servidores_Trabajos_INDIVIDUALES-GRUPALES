@@ -17,6 +17,11 @@ export class InventoriesController {
     return this.inventoriesService.findAll();
   }
 
+  @Get('/sellers/:sellerId')
+  findBySeller(@Param('sellerId') sellerId: string) {
+    return this.inventoriesService.findBySeller(+sellerId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.inventoriesService.findOne(+id);
