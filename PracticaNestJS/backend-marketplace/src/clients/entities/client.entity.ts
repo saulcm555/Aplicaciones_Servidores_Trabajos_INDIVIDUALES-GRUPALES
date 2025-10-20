@@ -22,13 +22,11 @@ export class Client {
   @Column({ type: 'varchar', length: 255 })
   address: string;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
   // Relaciones
   @OneToMany(() => Cart, (cart) => cart.client)
   carts: Cart[];
 
-  @OneToMany(() => Order, (order) => order.client)
-  orders: Order[];
 }

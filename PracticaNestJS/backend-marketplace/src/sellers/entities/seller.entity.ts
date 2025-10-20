@@ -19,7 +19,7 @@ export class Seller {
 	@Column({ name: 'description', type: 'text', nullable: true })
 	description: string;
 
-	@CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+	@CreateDateColumn({ name: 'created_at', type: 'datetime' })
 	created_at: Date;
 
 	// Relaciones

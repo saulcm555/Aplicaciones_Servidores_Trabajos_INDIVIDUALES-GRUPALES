@@ -16,7 +16,7 @@ export class ProductCart {
   @Column({ type: 'int' })
   quantity: number;
 
-  @CreateDateColumn({ name: 'added_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'added_at', type: 'datetime' })
   added_at: Date;
 
   // Relaciones

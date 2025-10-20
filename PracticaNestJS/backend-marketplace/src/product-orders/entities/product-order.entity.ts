@@ -22,7 +22,7 @@ export class ProductOrder {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   subtotal: number;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
   // Relaciones

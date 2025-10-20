@@ -14,10 +14,10 @@ export class Cart {
   @Column({ type: 'varchar', length: 50, default: 'active' })
   status: string;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'datetime' })
   updated_at: Date;
 
   // Relaciones

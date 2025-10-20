@@ -15,7 +15,7 @@ export class Inventory {
 	@Column({ name: 'stock_total', type: 'int', default: 0 })
 	stock_total: number;
 
-	@CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+	@CreateDateColumn({ name: 'created_at', type: 'datetime' })
 	created_at: Date;
 
 	@ManyToOne(() => Seller, (seller) => seller.inventories)

@@ -37,7 +37,7 @@ export class Product {
   @Column({ type: 'varchar', length: 255, nullable: true })
   photo: string;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
   // Relaciones

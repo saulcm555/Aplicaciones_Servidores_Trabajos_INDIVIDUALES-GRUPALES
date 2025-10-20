@@ -10,7 +10,7 @@ export class Order {
   @PrimaryGeneratedColumn('increment', { name: 'id_order' })
   id_order: number;
 
-  @Column({ name: 'order_date', type: 'timestamp' })
+  @Column({ name: 'order_date', type: 'datetime' })
   order_date: Date;
 
   @Column({ type: 'varchar', length: 50, default: 'pending' })
@@ -34,14 +34,10 @@ export class Order {
   @Column({ name: 'id_delivery', type: 'int', nullable: true })
   id_delivery: number;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
   // Relaciones
-  @ManyToOne(() => Client, (client) => client.orders)
-  @JoinColumn({ name: 'id_client' })
-  client: Client;
-
   @ManyToOne(() => Cart, { nullable: true })
   @JoinColumn({ name: 'id_cart' })
   cart: Cart;

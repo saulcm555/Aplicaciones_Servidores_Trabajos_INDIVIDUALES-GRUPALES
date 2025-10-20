@@ -18,7 +18,7 @@ export class Delivery {
   @Column({ type: 'varchar', length: 50 })
   status: string;
 
-  @Column({ name: 'estimated_time', type: 'timestamp', nullable: true })
+  @Column({ name: 'estimated_time', type: 'datetime', nullable: true })
   estimated_time: Date;
 
   @Column({ name: 'delivery_person', type: 'varchar', length: 255, nullable: true })
@@ -27,7 +27,7 @@ export class Delivery {
   @Column({ name: 'delivery_cost', type: 'decimal', precision: 10, scale: 2 })
   delivery_cost: number;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
   created_at: Date;
 
   // Relaciones

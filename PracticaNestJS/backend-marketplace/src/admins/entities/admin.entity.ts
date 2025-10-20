@@ -19,7 +19,7 @@ export class Admin {
 
   @CreateDateColumn({ 
     name: 'created_at', 
-    type: 'timestamp', 
+    type: 'datetime', 
     default: () => 'CURRENT_TIMESTAMP' 
   })
   created_at: Date;
