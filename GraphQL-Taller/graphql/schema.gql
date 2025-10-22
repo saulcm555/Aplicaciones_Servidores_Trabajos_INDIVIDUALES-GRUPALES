@@ -1,0 +1,807 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Cart {
+  """Client ID"""
+  clientId: Int!
+
+  """Cart ID"""
+  id: Int!
+
+  """Cart status"""
+  status: String!
+}
+
+type Category {
+  """Category name"""
+  category_name: String!
+  created_at: String!
+
+  """Category description"""
+  description: String
+
+  """Category ID"""
+  id_category: Int!
+}
+
+type Client {
+  address: String
+  created_at: String!
+  email: String!
+  id_client: Int!
+  name: String!
+  phone: String
+}
+
+type ClienteConComprasType {
+  """Email del cliente"""
+  email: String!
+
+  """Estado del cliente (activo/inactivo)"""
+  estado: String!
+
+  """Promedio de gasto por orden"""
+  gastoPorOrden: Float!
+
+  """ID del cliente"""
+  idCliente: Int!
+
+  """Nombre del cliente"""
+  nombre: String!
+
+  """Total gastado"""
+  totalGastado: Float!
+
+  """Total de órdenes realizadas"""
+  totalOrdenes: Int!
+
+  """Fecha de última compra"""
+  ultimaCompra: String!
+}
+
+type ComparacionMensualType {
+  """Año"""
+  anio: Int!
+
+  """Ingresos del mes"""
+  ingresos: Float!
+
+  """Mes"""
+  mes: Int!
+
+  """Órdenes del mes"""
+  ordenes: Int!
+
+  """Variación porcentual respecto al mes anterior"""
+  variacionPorcentual: Float
+}
+
+input CreateCartInput {
+  """Client ID"""
+  clientId: Int!
+
+  """Cart status"""
+  status: String!
+}
+
+input CreateCategoryInput {
+  """Category name"""
+  category_name: String!
+
+  """Category description"""
+  description: String
+}
+
+input CreateClientInput {
+  address: String
+  email: String!
+  name: String!
+  phone: String
+}
+
+input CreateDeliveryInput {
+  """Delivery address"""
+  address: String!
+
+  """Delivery date"""
+  deliveryDate: String
+
+  """Order ID"""
+  orderId: Int!
+
+  """Delivery status"""
+  status: String!
+}
+
+input CreateInventoryInput {
+  """Warehouse location"""
+  location: String
+
+  """Product ID"""
+  productId: Int!
+
+  """Stock quantity"""
+  quantity: Int!
+}
+
+input CreateOrderInput {
+  """Client ID"""
+  clientId: Int!
+
+  """Order status"""
+  status: String!
+
+  """Order total"""
+  total: Float!
+}
+
+input CreatePaymentMethodInput {
+  """Payment method description"""
+  description: String
+
+  """Is active"""
+  isActive: Boolean! = true
+
+  """Payment method name"""
+  name: String!
+}
+
+input CreateProductCartInput {
+  """Cart ID"""
+  cartId: Int!
+
+  """Product ID"""
+  productId: Int!
+
+  """Quantity"""
+  quantity: Int!
+}
+
+input CreateProductOrderInput {
+  """Order ID"""
+  orderId: Int!
+
+  """Product ID"""
+  productId: Int!
+
+  """Quantity"""
+  quantity: Int!
+
+  """Unit price"""
+  unitPrice: Float!
+}
+
+input CreateProductoInput {
+  description: String
+  id_category: Int
+  id_seller: Int
+  id_sub_category: Int
+  photo: String
+  price: Float!
+  product_name: String!
+  stock: Int! = 0
+}
+
+input CreateSellerInput {
+  """Business name"""
+  businessName: String
+
+  """Seller email"""
+  email: String!
+
+  """Seller name"""
+  name: String!
+
+  """Seller phone"""
+  phone: String
+}
+
+input CreateSubcategoryProductInput {
+  """Product ID"""
+  productId: Int!
+
+  """Subcategory ID"""
+  subcategoryId: Int!
+}
+
+type Delivery {
+  """Delivery address"""
+  address: String!
+
+  """Delivery date"""
+  deliveryDate: String
+
+  """Delivery ID"""
+  id: Int!
+
+  """Order ID"""
+  orderId: Int!
+
+  """Delivery status"""
+  status: String!
+}
+
+type EstadisticasVentasType {
+  """Clientes únicos"""
+  clientesUnicos: Int!
+
+  """Ingresos totales"""
+  ingresosTotales: Float!
+
+  """Total de productos vendidos"""
+  productosVendidos: Int!
+
+  """Tasa de conversión en porcentaje"""
+  tasaConversion: Float
+
+  """Ticket promedio"""
+  ticketPromedio: Float!
+
+  """Total de órdenes en el período"""
+  totalOrdenes: Int!
+}
+
+input FiltroBusquedaProductosInput {
+  """Término de búsqueda en nombre o descripción"""
+  busqueda: String
+
+  """ID de categoría"""
+  categoriaId: Int
+
+  """Dirección de orden (ASC/DESC)"""
+  direccion: String = "DESC"
+
+  """Límite por página"""
+  limite: Int = 20
+
+  """Ordenar por campo"""
+  ordenarPor: String = "created_at"
+
+  """Página"""
+  pagina: Int = 1
+
+  """Precio máximo"""
+  precioMaximo: Int
+
+  """Precio mínimo"""
+  precioMinimo: Int
+
+  """Stock máximo"""
+  stockMaximo: Int
+
+  """Stock mínimo"""
+  stockMinimo: Int
+
+  """ID de vendedor"""
+  vendedorId: Int
+}
+
+input FiltroClientesInput {
+  """Compras mínimas realizadas"""
+  comprasMinimas: Int
+
+  """Días desde última compra"""
+  diasUltimaCompra: Int
+
+  """Estado del cliente (activo/inactivo)"""
+  estado: String
+
+  """Gasto mínimo total"""
+  gastoMinimo: Int
+
+  """Límite de resultados"""
+  limite: Int = 20
+}
+
+input FiltroVentasInput {
+  """Año"""
+  anio: Int
+
+  """Límite de resultados"""
+  limite: Int = 10
+
+  """Mes (1-12)"""
+  mes: Int
+}
+
+type InventarioBajoType {
+  """Nivel de criticidad"""
+  nivelCriticidad: String
+
+  """Nombre del producto"""
+  nombreProducto: String!
+
+  """Nombre del vendedor"""
+  nombreVendedor: String!
+
+  """Precio del producto"""
+  precio: Float!
+
+  """ID del producto"""
+  productoId: Int!
+
+  """Stock actual"""
+  stockActual: Int!
+
+  """Stock mínimo recomendado"""
+  stockMinimo: Int!
+}
+
+type Inventory {
+  """Inventory ID"""
+  id: Int!
+
+  """Warehouse location"""
+  location: String
+
+  """Product ID"""
+  productId: Int!
+
+  """Stock quantity"""
+  quantity: Int!
+}
+
+type Mutation {
+  createCart(createCartInput: CreateCartInput!): Cart!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createClient(createClientInput: CreateClientInput!): Client!
+  createDelivery(createDeliveryInput: CreateDeliveryInput!): Delivery!
+  createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  createPaymentMethod(createPaymentMethodInput: CreatePaymentMethodInput!): PaymentMethod!
+  createProductCart(createProductCartInput: CreateProductCartInput!): ProductCart!
+  createProductOrder(createProductOrderInput: CreateProductOrderInput!): ProductOrder!
+  createProducto(createProductoInput: CreateProductoInput!): Producto!
+  createSeller(createSellerInput: CreateSellerInput!): Seller!
+  createSubcategoryProduct(createSubcategoryProductInput: CreateSubcategoryProductInput!): SubcategoryProduct!
+  removeCart(id: Int!): Cart!
+  removeCategory(id: Int!): Category!
+  removeClient(id: Int!): Client!
+  removeDelivery(id: Int!): Delivery!
+  removeInventory(id: Int!): Inventory!
+  removeOrder(id: Int!): Order!
+  removePaymentMethod(id: Int!): PaymentMethod!
+  removeProductCart(id: Int!): ProductCart!
+  removeProductOrder(id: Int!): ProductOrder!
+  removeProducto(id: Int!): Producto!
+  removeSeller(id: Int!): Seller!
+  removeSubcategoryProduct(id: Int!): SubcategoryProduct!
+  updateCart(updateCartInput: UpdateCartInput!): Cart!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updateClient(updateClientInput: UpdateClientInput!): Client!
+  updateDelivery(updateDeliveryInput: UpdateDeliveryInput!): Delivery!
+  updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  updatePaymentMethod(updatePaymentMethodInput: UpdatePaymentMethodInput!): PaymentMethod!
+  updateProductCart(updateProductCartInput: UpdateProductCartInput!): ProductCart!
+  updateProductOrder(updateProductOrderInput: UpdateProductOrderInput!): ProductOrder!
+  updateProducto(updateProductoInput: UpdateProductoInput!): Producto!
+  updateSeller(updateSellerInput: UpdateSellerInput!): Seller!
+  updateSubcategoryProduct(updateSubcategoryProductInput: UpdateSubcategoryProductInput!): SubcategoryProduct!
+}
+
+type Order {
+  """Client ID"""
+  clientId: Int!
+
+  """Order date"""
+  date: String!
+
+  """Order ID"""
+  id: Int!
+
+  """Order status"""
+  status: String!
+
+  """Order total"""
+  total: Float!
+}
+
+type PaginatedProducts {
+  data: [Producto!]!
+  meta: PaginationMeta!
+}
+
+type PaginationMeta {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaymentMethod {
+  """Payment method description"""
+  description: String
+
+  """Payment method ID"""
+  id: Int!
+
+  """Is active"""
+  isActive: Boolean!
+
+  """Payment method name"""
+  name: String!
+}
+
+type ProductCart {
+  """Cart ID"""
+  cartId: Int!
+
+  """Product Cart ID"""
+  id: Int!
+
+  """Product ID"""
+  productId: Int!
+
+  """Quantity"""
+  quantity: Int!
+}
+
+type ProductOrder {
+  """Product Order ID"""
+  id: Int!
+
+  """Order ID"""
+  orderId: Int!
+
+  """Product ID"""
+  productId: Int!
+
+  """Quantity"""
+  quantity: Int!
+
+  """Subtotal"""
+  subtotal: Float!
+
+  """Unit price"""
+  unitPrice: Float!
+}
+
+type Producto {
+  created_at: String!
+  description: String
+  id_category: Int
+  id_product: Int!
+  id_seller: Int
+  id_sub_category: Int
+  photo: String
+  price: Float!
+  product_name: String!
+  stock: Int!
+}
+
+type ProductosMasVendidosType {
+  """Categoría del producto"""
+  categoria: String!
+
+  """Ingresos totales generados"""
+  ingresosTotales: Float!
+
+  """Nombre del producto"""
+  nombre: String!
+
+  """Número de órdenes que incluyen este producto"""
+  numeroOrdenes: Int!
+
+  """Precio promedio de venta"""
+  precioPromedio: Float!
+
+  """ID del producto"""
+  productoId: Int!
+
+  """Total de unidades vendidas"""
+  unidadesVendidas: Int!
+}
+
+type Query {
+  """
+  Búsqueda avanzada de productos con múltiples criterios: texto, categoría, vendedor, rangos de precio y stock, con ordenamiento y paginación
+  """
+  buscarProductosAvanzado(filtro: FiltroBusquedaProductosInput!): PaginatedProducts!
+  cart(id: Int!): Cart!
+  carts: [Cart!]!
+  categories: [Category!]!
+  category(id: Int!): Category!
+  client(id: Int!): Client!
+
+  """
+  Obtiene perfil completo de clientes incluyendo estadísticas de compras, gasto total y comportamiento de compra
+  """
+  clientesConHistorialCompras(comprasMinimas: Float = 1): [ClienteConComprasType!]!
+  clients: [Client!]!
+
+  """
+  Compara ventas mes a mes en un rango de fechas, calculando ingresos, órdenes y variación porcentual entre períodos
+  """
+  compararVentasPorPeriodos(rango: RangoPeriodoInput!): [ComparacionMensualType!]!
+  deliveries: [Delivery!]!
+  delivery(id: Int!): Delivery!
+
+  """
+  Calcula KPIs de ventas: total de órdenes, ingresos, ticket promedio, productos vendidos y clientes únicos
+  """
+  estadisticasVentas(filtro: FiltroVentasInput): EstadisticasVentasType!
+
+  """
+  Filtra clientes basándose en su comportamiento de compra: compras mínimas, gasto total, actividad reciente y estado
+  """
+  filtrarClientesPorComportamiento(filtro: FiltroClientesInput!): [ClienteConComprasType!]!
+  inventories: [Inventory!]!
+  inventory(id: Int!): Inventory!
+  order(id: Int!): Order!
+  orders: [Order!]!
+  paymentMethod(id: Int!): PaymentMethod!
+  paymentMethods: [PaymentMethod!]!
+  product(id: Int!): Producto
+  productCart(id: Int!): ProductCart!
+  productCarts: [ProductCart!]!
+  productCartsByCart(cartId: Int!): [ProductCart!]!
+  productOrder(id: Int!): ProductOrder!
+  productOrders: [ProductOrder!]!
+  productOrdersByOrder(orderId: Int!): [ProductOrder!]!
+  producto(id: Int!): Producto!
+  productos: [Producto!]!
+
+  """
+  Identifica productos con stock crítico incluyendo información del vendedor y nivel de urgencia para reabastecimiento
+  """
+  productosInventarioBajo(umbral: Float = 10): [InventarioBajoType!]!
+
+  """
+  Obtiene los productos más vendidos con métricas de rendimiento: unidades vendidas, ingresos totales, precio promedio y número de órdenes
+  """
+  productosMasVendidos(filtro: FiltroVentasInput): [ProductosMasVendidosType!]!
+  products: [Producto!]!
+  productsByCategory(categoryId: Int!): [Producto!]!
+  productsBySeller(sellerId: Int!): [Producto!]!
+
+  """
+  Analiza el rendimiento de cada categoría: productos totales, ventas, ingresos y tasa de rotación de inventario
+  """
+  rendimientoCategorias: [RendimientoCategoriasType!]!
+  seller(id: Int!): Seller!
+  sellers: [Seller!]!
+  subcategoryProduct(id: Int!): SubcategoryProduct!
+  subcategoryProducts: [SubcategoryProduct!]!
+  subcategoryProductsByProduct(productId: Int!): [SubcategoryProduct!]!
+  subcategoryProductsBySubcategory(subcategoryId: Int!): [SubcategoryProduct!]!
+
+  """
+  Obtiene información detallada de vendedores incluyendo estadísticas de sus productos, categorías y valor de inventario
+  """
+  vendedoresConProductos(limite: Float = 10): [VendedorConProductosType!]!
+}
+
+input RangoPeriodoInput {
+  """Año final"""
+  anioFinal: Int!
+
+  """Año inicial"""
+  anioInicial: Int!
+
+  """Mes final (1-12)"""
+  mesFinal: Int!
+
+  """Mes inicial (1-12)"""
+  mesInicial: Int!
+}
+
+type RendimientoCategoriasType {
+  """ID de la categoría"""
+  categoriaId: Int!
+
+  """Ingresos generados"""
+  ingresos: Float!
+
+  """Nombre de la categoría"""
+  nombreCategoria: String!
+
+  """Productos vendidos"""
+  productosVendidos: Int!
+
+  """Tasa de rotación de inventario"""
+  tasaRotacion: Float
+
+  """Total de productos en la categoría"""
+  totalProductos: Int!
+}
+
+type Seller {
+  """Business name"""
+  businessName: String
+
+  """Seller email"""
+  email: String!
+
+  """Seller ID"""
+  id: Int!
+
+  """Seller name"""
+  name: String!
+
+  """Seller phone"""
+  phone: String
+}
+
+type SubcategoryProduct {
+  """Created at"""
+  createdAt: String
+
+  """Subcategory Product ID"""
+  id: Int!
+
+  """Product ID"""
+  productId: Int!
+
+  """Subcategory ID"""
+  subcategoryId: Int!
+}
+
+input UpdateCartInput {
+  """Client ID"""
+  clientId: Int
+  id: Int!
+
+  """Cart status"""
+  status: String
+}
+
+input UpdateCategoryInput {
+  """Category name"""
+  category_name: String
+
+  """Category description"""
+  description: String
+  id: Int!
+}
+
+input UpdateClientInput {
+  address: String
+  email: String
+  id: Int!
+  name: String
+  phone: String
+}
+
+input UpdateDeliveryInput {
+  """Delivery address"""
+  address: String
+
+  """Delivery date"""
+  deliveryDate: String
+  id: Int!
+
+  """Order ID"""
+  orderId: Int
+
+  """Delivery status"""
+  status: String
+}
+
+input UpdateInventoryInput {
+  id: Int!
+
+  """Warehouse location"""
+  location: String
+
+  """Product ID"""
+  productId: Int
+
+  """Stock quantity"""
+  quantity: Int
+}
+
+input UpdateOrderInput {
+  """Client ID"""
+  clientId: Int
+  id: Int!
+
+  """Order status"""
+  status: String
+
+  """Order total"""
+  total: Float
+}
+
+input UpdatePaymentMethodInput {
+  """Payment method description"""
+  description: String
+  id: Int!
+
+  """Is active"""
+  isActive: Boolean = true
+
+  """Payment method name"""
+  name: String
+}
+
+input UpdateProductCartInput {
+  """Cart ID"""
+  cartId: Int
+  id: Int!
+
+  """Product ID"""
+  productId: Int
+
+  """Quantity"""
+  quantity: Int
+}
+
+input UpdateProductOrderInput {
+  id: Int!
+
+  """Order ID"""
+  orderId: Int
+
+  """Product ID"""
+  productId: Int
+
+  """Quantity"""
+  quantity: Int
+
+  """Unit price"""
+  unitPrice: Float
+}
+
+input UpdateProductoInput {
+  description: String
+  id: Int!
+  id_category: Int
+  id_seller: Int
+  id_sub_category: Int
+  photo: String
+  price: Float
+  product_name: String
+  stock: Int = 0
+}
+
+input UpdateSellerInput {
+  """Business name"""
+  businessName: String
+
+  """Seller email"""
+  email: String
+  id: Int!
+
+  """Seller name"""
+  name: String
+
+  """Seller phone"""
+  phone: String
+}
+
+input UpdateSubcategoryProductInput {
+  id: Int!
+
+  """Product ID"""
+  productId: Int
+
+  """Subcategory ID"""
+  subcategoryId: Int
+}
+
+type VendedorConProductosType {
+  """Categorías en las que vende"""
+  categorias: [String!]!
+
+  """Email del vendedor"""
+  email: String!
+
+  """ID del vendedor"""
+  idVendedor: Int!
+
+  """Nombre del vendedor"""
+  nombreVendedor: String!
+
+  """Precio promedio de productos"""
+  precioPromedio: Float!
+
+  """Total de productos activos"""
+  totalProductos: Int!
+
+  """Inventario total en valor"""
+  valorInventario: Float!
+}
