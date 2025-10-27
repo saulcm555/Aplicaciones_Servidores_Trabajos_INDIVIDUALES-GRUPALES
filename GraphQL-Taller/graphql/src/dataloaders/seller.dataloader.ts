@@ -20,7 +20,7 @@ export class SellerDataLoader {
       );
 
       const sellerMap = new Map(
-        data.map((seller) => [seller.id, seller]),
+        data.map((seller) => [seller.id_seller, seller]),
       );
 
       return ids.map((id) => sellerMap.get(id) || new Error(`Seller ${id} not found`)) as (Seller | Error)[];

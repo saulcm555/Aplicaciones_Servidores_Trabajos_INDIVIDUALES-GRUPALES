@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
+import { SubCategory } from '../../categories/entities/sub-category.entity';
 
 @Entity('subcategory_product')
 export class SubcategoryProduct {
@@ -20,11 +21,8 @@ export class SubcategoryProduct {
   @JoinColumn({ name: 'id_product' })
   product: Product;
 
-  // Nota: Necesitarás crear la entidad Subcategory y descomentar esta relación
-  // @ManyToOne(() => Subcategory, (subcategory) => subcategory.subcategoryProducts, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'id_subcategory' })
-  // subcategory: Subcategory;
+  @ManyToOne(() => SubCategory, (subcategory) => subcategory.subcategoryproducts, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'id_subcategory' })
+  subcategory: SubCategory;
   
-  // Temporal: relación simplificada sin entidad Subcategory
-  subcategory: any;
 }

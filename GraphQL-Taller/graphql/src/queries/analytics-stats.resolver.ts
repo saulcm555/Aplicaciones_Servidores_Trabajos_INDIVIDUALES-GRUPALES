@@ -19,7 +19,7 @@ import { ProductOrder } from '../product-orders/entities/product-order.entity';
  */
 @Resolver()
 export class AnalyticsStatsResolver {
-  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3000';
+  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3006';
 
   constructor(
     @Inject(HttpService)
@@ -140,7 +140,7 @@ export class AnalyticsStatsResolver {
     let ordenesFiltradas = orders;
     if (filtro?.mes && filtro?.anio) {
       ordenesFiltradas = orders.filter((order) => {
-        const fecha = new Date(order.date);
+        const fecha = new Date(order.order_date);
         return (
           fecha.getMonth() + 1 === filtro.mes &&
           fecha.getFullYear() === filtro.anio
@@ -151,16 +151,16 @@ export class AnalyticsStatsResolver {
     // 3. Calcular estadísticas
     const totalOrdenes = ordenesFiltradas.length;
     const ingresosTotales = ordenesFiltradas.reduce(
-      (sum, o) => sum + o.total,
+      (sum, o) => sum + o.total_amount,
       0,
     );
     const ticketPromedio = totalOrdenes > 0 ? ingresosTotales / totalOrdenes : 0;
 
     // Clientes únicos
-    const clientesUnicos = new Set(ordenesFiltradas.map((o) => o.clientId)).size;
+    const clientesUnicos = new Set(ordenesFiltradas.map((o) => o.id_client)).size;
 
     // Total de productos vendidos
-    const idsOrdenesActuales = new Set(ordenesFiltradas.map((o) => o.id));
+    const idsOrdenesActuales = new Set(ordenesFiltradas.map((o) => o.id_order));
     const productOrdersFiltrados = productOrders.filter((po) =>
       idsOrdenesActuales.has(po.orderId),
     );

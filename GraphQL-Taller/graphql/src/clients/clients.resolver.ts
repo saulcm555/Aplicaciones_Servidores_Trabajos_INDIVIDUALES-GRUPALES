@@ -1,17 +1,14 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { ClientsService } from './clients.service';
 import { Client } from './entities/client.entity';
 import { CreateClientInput } from './dto/create-client.input';
 import { UpdateClientInput } from './dto/update-client.input';
+import { Cart } from '../carts/entities/cart.entity';
+import axios from 'axios';
 
 @Resolver(() => Client)
 export class ClientsResolver {
   constructor(private readonly clientsService: ClientsService) {}
-
-  @Mutation(() => Client)
-  createClient(@Args('createClientInput') createClientInput: CreateClientInput) {
-    return this.clientsService.create(createClientInput);
-  }
 
   @Query(() => [Client], { name: 'clients' })
   findAll() {
@@ -23,13 +20,29 @@ export class ClientsResolver {
     return this.clientsService.findOne(id);
   }
 
-  @Mutation(() => Client)
-  updateClient(@Args('updateClientInput') updateClientInput: UpdateClientInput) {
-    return this.clientsService.update(updateClientInput.id, updateClientInput);
-  }
+  @ResolveField(() => [Cart], { nullable: true })
+  async carts(@Parent() client: Client): Promise<Cart[]> {
+    try {
+      // Obtener los carritos del cliente desde la REST API
+      const response = await axios.get(`http://localhost:3006/api/v1/carts/client/${client.id_client}`);
+      let carts = [];
+      
+      if (response.data && Array.isArray(response.data.data)) {
+        carts = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        carts = response.data;
+      }
 
-  @Mutation(() => Client)
-  removeClient(@Args('id', { type: () => Int }) id: number) {
-    return this.clientsService.remove(id);
+      return carts.map(cart => ({
+        id_cart: cart.id_cart,
+        id_client: cart.id_client,
+        status: cart.status,
+        created_at: cart.created_at,
+        updated_at: cart.updated_at,
+      }));
+    } catch (error) {
+      console.error(`❌ Error fetching carts for client #${client.id_client}:`, error.response?.data);
+      return [];
+    }
   }
 }

@@ -1,16 +1,33 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength } from 'class-validator';
 
 @InputType()
 export class CreateClientInput {
   @Field()
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @Field()
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
 
-  @Field({ nullable: true })
-  phone?: string;
+  @Field()
+  @IsString()
+  @MinLength(6)
+  @IsNotEmpty()
+  password: string;
 
-  @Field({ nullable: true })
-  address?: string;
+  @Field()
+  @IsString()
+  @MaxLength(20)
+  @IsNotEmpty()
+  phone: string;
+
+  @Field()
+  @IsString()
+  @MaxLength(255)
+  @IsNotEmpty()
+  address: string;
 }

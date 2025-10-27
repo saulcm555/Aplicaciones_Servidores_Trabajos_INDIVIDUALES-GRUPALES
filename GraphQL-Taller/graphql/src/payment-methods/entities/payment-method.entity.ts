@@ -1,16 +1,17 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Order } from '../../orders/entities/order.entity';
 
 @ObjectType()
 export class PaymentMethod {
   @Field(() => Int, { description: 'Payment method ID' })
-  id: number;
+  id_payment_method: number;
 
   @Field({ description: 'Payment method name' })
-  name: string;
+  method_name: string;
 
-  @Field({ description: 'Payment method description', nullable: true })
-  description?: string;
+  @Field({ nullable: true, description: 'Payment details' })
+  details_payment?: string;
 
-  @Field({ description: 'Is active' })
-  isActive: boolean;
+  @Field(() => [Order], { nullable: true, description: 'Orders using this payment method' })
+  orders?: Order[];
 }

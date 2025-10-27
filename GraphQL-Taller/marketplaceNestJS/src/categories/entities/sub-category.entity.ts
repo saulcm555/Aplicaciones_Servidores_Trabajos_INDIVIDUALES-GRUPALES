@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Category } from './category.entity';
+import { SubcategoryProduct } from '../../subcategory-products/entities/subcategory-product.entity';
 
 @Entity('sub_category')
 export class SubCategory {
@@ -21,4 +22,8 @@ export class SubCategory {
   })
   @JoinColumn({ name: 'id_category' })
   category: Category;
+
+  // Relación bidireccional OneToMany con SubcategoryProduct
+  @OneToMany(() => SubcategoryProduct, (subcategoryProduct) => subcategoryProduct.subcategory)
+  subcategoryproducts: SubcategoryProduct[];
 }

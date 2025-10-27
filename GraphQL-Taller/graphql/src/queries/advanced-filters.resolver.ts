@@ -20,7 +20,7 @@ import { Order } from '../orders/entities/order.entity';
  */
 @Resolver()
 export class AdvancedFiltersResolver {
-  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3000';
+  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3006';
 
   constructor(
     @Inject(HttpService)
@@ -171,14 +171,14 @@ export class AdvancedFiltersResolver {
 
     // 3. Calcular estadísticas por cliente
     const clientesData = clients.map((client) => {
-      const ordenesCliente = orders.filter((o) => o.clientId === client.id_client);
+      const ordenesCliente = orders.filter((o) => o.id_client === client.id_client);
 
-      const totalGastado = ordenesCliente.reduce((sum, o) => sum + Number(o.total), 0);
+      const totalGastado = ordenesCliente.reduce((sum, o) => sum + Number(o.total_amount), 0);
       const gastoPorOrden =
         ordenesCliente.length > 0 ? totalGastado / ordenesCliente.length : 0;
 
       const fechasOrdenes = ordenesCliente
-        .map((o) => new Date(o.date))
+        .map((o) => new Date(o.order_date))
         .sort((a, b) => b.getTime() - a.getTime());
 
       const ultimaCompra =
@@ -197,8 +197,8 @@ export class AdvancedFiltersResolver {
 
       return {
         idCliente: client.id_client,
-        nombre: client.name,
-        email: client.email,
+        nombre: client.client_name,
+        email: client.client_email,
         totalOrdenes: ordenesCliente.length,
         totalGastado: parseFloat(totalGastado.toFixed(2)),
         gastoPorOrden: parseFloat(gastoPorOrden.toFixed(2)),
@@ -276,14 +276,14 @@ export class AdvancedFiltersResolver {
     // 3. Calcular estadísticas por mes
     const resultado: ComparacionMensualType[] = meses.map((periodo) => {
       const ordenesMes = orders.filter((order) => {
-        const fecha = new Date(order.date);
+        const fecha = new Date(order.order_date);
         return (
           fecha.getMonth() + 1 === periodo.mes &&
           fecha.getFullYear() === periodo.anio
         );
       });
 
-      const ingresos = ordenesMes.reduce((sum, o) => sum + Number(o.total), 0);
+      const ingresos = ordenesMes.reduce((sum, o) => sum + Number(o.total_amount), 0);
       const ordenes = ordenesMes.length;
 
       return {

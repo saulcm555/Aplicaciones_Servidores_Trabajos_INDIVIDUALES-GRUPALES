@@ -19,14 +19,14 @@ export class ClientsService {
 
   async findAll(): Promise<Client[]> {
     return await this.clientRepository.find({
-      relations: ['carts', 'orders'],
+      relations: ['carts'],
     });
   }
 
   async findOne(id: number): Promise<Client> {
     const client = await this.clientRepository.findOne({
       where: { id_client: id },
-      relations: ['carts', 'orders'],
+      relations: ['carts'],
     });
     
     if (!client) {

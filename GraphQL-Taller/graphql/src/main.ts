@@ -14,7 +14,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: false,
       transform: true,
     }),
   );
@@ -22,7 +22,7 @@ async function bootstrap() {
   // Habilitar CORS para consumir desde clientes
   app.enableCors();
 
-  const port = process.env.PORT ?? 3004;
+  const port = process.env.PORT ?? 3005;
   await app.listen(port);
   console.log(`🚀 GraphQL Gateway running on: http://localhost:${port}/graphql`);
   console.log(`📊 GraphQL Playground: http://localhost:${port}/graphql`);

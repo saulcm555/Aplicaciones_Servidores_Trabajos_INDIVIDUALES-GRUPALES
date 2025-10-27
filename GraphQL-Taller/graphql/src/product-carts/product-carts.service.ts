@@ -5,12 +5,18 @@ import axios from 'axios';
 
 @Injectable()
 export class ProductCartsService {
-  private readonly REST_API_URL = 'http://localhost:3000/api/v1/product-carts';
+  private readonly REST_API_URL = 'http://localhost:3006/api/v1/product-carts';
 
   async create(createProductCartInput: CreateProductCartInput) {
     try {
       const response = await axios.post(this.REST_API_URL, createProductCartInput);
-      return response.data;
+      return {
+        id_product_cart: response.data.id_product_cart,
+        id_product: response.data.id_product,
+        id_cart: response.data.id_cart,
+        quantity: response.data.quantity,
+        added_at: response.data.added_at ? new Date(response.data.added_at) : null,
+      };
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error creating product cart', error.response?.status || 500);
     }
@@ -19,7 +25,21 @@ export class ProductCartsService {
   async findAll() {
     try {
       const response = await axios.get(this.REST_API_URL);
-      return response.data;
+      let productCarts = [];
+      
+      if (response.data && Array.isArray(response.data.data)) {
+        productCarts = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        productCarts = response.data;
+      }
+
+      return productCarts.map(pc => ({
+        id_product_cart: pc.id_product_cart,
+        id_product: pc.id_product,
+        id_cart: pc.id_cart,
+        quantity: pc.quantity,
+        added_at: pc.added_at ? new Date(pc.added_at) : null,
+      }));
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error fetching product carts', error.response?.status || 500);
     }
@@ -28,7 +48,13 @@ export class ProductCartsService {
   async findOne(id: number) {
     try {
       const response = await axios.get(`${this.REST_API_URL}/${id}`);
-      return response.data;
+      return {
+        id_product_cart: response.data.id_product_cart,
+        id_product: response.data.id_product,
+        id_cart: response.data.id_cart,
+        quantity: response.data.quantity,
+        added_at: response.data.added_at ? new Date(response.data.added_at) : null,
+      };
     } catch (error) {
       throw new HttpException(error.response?.data || `Product cart #${id} not found`, error.response?.status || 404);
     }
@@ -37,7 +63,21 @@ export class ProductCartsService {
   async findByCart(cartId: number) {
     try {
       const response = await axios.get(`${this.REST_API_URL}/cart/${cartId}`);
-      return response.data;
+      let productCarts = [];
+      
+      if (response.data && Array.isArray(response.data.data)) {
+        productCarts = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        productCarts = response.data;
+      }
+
+      return productCarts.map(pc => ({
+        id_product_cart: pc.id_product_cart,
+        id_product: pc.id_product,
+        id_cart: pc.id_cart,
+        quantity: pc.quantity,
+        added_at: pc.added_at ? new Date(pc.added_at) : null,
+      }));
     } catch (error) {
       throw new HttpException(error.response?.data || `Product carts for cart #${cartId} not found`, error.response?.status || 404);
     }

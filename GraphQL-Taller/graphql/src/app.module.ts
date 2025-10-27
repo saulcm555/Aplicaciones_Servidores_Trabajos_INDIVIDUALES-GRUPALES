@@ -15,6 +15,8 @@ import { DeliveriesModule } from './deliveries/deliveries.module';
 import { ProductOrdersModule } from './product-orders/product-orders.module';
 import { ProductCartsModule } from './product-carts/product-carts.module';
 import { SubcategoryProductsModule } from './subcategory-products/subcategory-products.module';
+import { AdminsModule } from './admins/admins.module';
+import { SubCategoriesModule } from './subcategories/subcategories.module';
 import { 
   ProductQueriesResolver, 
   CategoryQueriesResolver, 
@@ -50,6 +52,8 @@ import {
     ProductOrdersModule,
     ProductCartsModule,
     SubcategoryProductsModule,
+    AdminsModule,
+    SubCategoriesModule,
   ],
   providers: [
     ProductQueriesResolver,

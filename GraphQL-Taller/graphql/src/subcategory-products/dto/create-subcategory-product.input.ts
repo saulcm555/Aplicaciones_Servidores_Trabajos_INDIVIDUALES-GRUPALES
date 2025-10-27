@@ -3,8 +3,8 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateSubcategoryProductInput {
   @Field(() => Int, { description: 'Subcategory ID' })
-  subcategoryId: number;
+  id_subcategory: number;
 
   @Field(() => Int, { description: 'Product ID' })
-  productId: number;
+  id_product: number;
 }

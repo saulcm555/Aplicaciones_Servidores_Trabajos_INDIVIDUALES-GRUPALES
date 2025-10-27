@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Cart } from 'src/carts/entities/cart.entity';
 
 @ObjectType()
 export class Client {
@@ -6,10 +7,10 @@ export class Client {
   id_client: number;
 
   @Field()
-  name: string;
+  client_name: string;
 
   @Field()
-  email: string;
+  client_email: string;
 
   @Field({ nullable: true })
   phone?: string;
@@ -19,4 +20,7 @@ export class Client {
 
   @Field()
   created_at: string;
+
+  @Field(() => [Cart], { description: 'Carritos asociados al cliente', nullable: true })
+  carts?: Cart[];
 }

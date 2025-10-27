@@ -2,35 +2,79 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Admin {
+  """Admin email address"""
+  admin_email: String!
+
+  """Admin name"""
+  admin_name: String!
+
+  """Admin password (hashed)"""
+  admin_password: String!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Admin ID"""
+  id_admin: Int!
+
+  """Admin role"""
+  role: String
+
+  """Updated date"""
+  updated_at: DateTime!
+}
+
 type Cart {
-  """Client ID"""
-  clientId: Int!
+  """Cliente asociado al carrito"""
+  client: Client
+
+  """Cart status"""
+  created_at: DateTime!
 
   """Cart ID"""
-  id: Int!
+  id_cart: Int!
+
+  """Cart ID"""
+  id_client: Int!
+
+  """Órdenes asociadas al carrito"""
+  orders: [Order!]
+
+  """Productos dentro del carrito"""
+  productCarts: [ProductCart!]
 
   """Cart status"""
   status: String!
+
+  """Last update date"""
+  updated_at: DateTime!
 }
 
 type Category {
+  """Category description"""
+  category_description: String
+
   """Category name"""
   category_name: String!
-  created_at: String!
-
-  """Category description"""
-  description: String
+  category_photo: String
 
   """Category ID"""
   id_category: Int!
+
+  """Órdenes asociadas al carrito"""
+  orders: [SubCategory!]
 }
 
 type Client {
   address: String
+
+  """Carritos asociados al cliente"""
+  carts: [Cart!]
+  client_email: String!
+  client_name: String!
   created_at: String!
-  email: String!
   id_client: Int!
-  name: String!
   phone: String
 }
 
@@ -77,146 +121,38 @@ type ComparacionMensualType {
   variacionPorcentual: Float
 }
 
-input CreateCartInput {
-  """Client ID"""
-  clientId: Int!
-
-  """Cart status"""
-  status: String!
-}
-
-input CreateCategoryInput {
-  """Category name"""
-  category_name: String!
-
-  """Category description"""
-  description: String
-}
-
-input CreateClientInput {
-  address: String
-  email: String!
-  name: String!
-  phone: String
-}
-
-input CreateDeliveryInput {
-  """Delivery address"""
-  address: String!
-
-  """Delivery date"""
-  deliveryDate: String
-
-  """Order ID"""
-  orderId: Int!
-
-  """Delivery status"""
-  status: String!
-}
-
-input CreateInventoryInput {
-  """Warehouse location"""
-  location: String
-
-  """Product ID"""
-  productId: Int!
-
-  """Stock quantity"""
-  quantity: Int!
-}
-
-input CreateOrderInput {
-  """Client ID"""
-  clientId: Int!
-
-  """Order status"""
-  status: String!
-
-  """Order total"""
-  total: Float!
-}
-
-input CreatePaymentMethodInput {
-  """Payment method description"""
-  description: String
-
-  """Is active"""
-  isActive: Boolean! = true
-
-  """Payment method name"""
-  name: String!
-}
-
-input CreateProductCartInput {
-  """Cart ID"""
-  cartId: Int!
-
-  """Product ID"""
-  productId: Int!
-
-  """Quantity"""
-  quantity: Int!
-}
-
-input CreateProductOrderInput {
-  """Order ID"""
-  orderId: Int!
-
-  """Product ID"""
-  productId: Int!
-
-  """Quantity"""
-  quantity: Int!
-
-  """Unit price"""
-  unitPrice: Float!
-}
-
-input CreateProductoInput {
-  description: String
-  id_category: Int
-  id_seller: Int
-  id_sub_category: Int
-  photo: String
-  price: Float!
-  product_name: String!
-  stock: Int! = 0
-}
-
-input CreateSellerInput {
-  """Business name"""
-  businessName: String
-
-  """Seller email"""
-  email: String!
-
-  """Seller name"""
-  name: String!
-
-  """Seller phone"""
-  phone: String
-}
-
-input CreateSubcategoryProductInput {
-  """Product ID"""
-  productId: Int!
-
-  """Subcategory ID"""
-  subcategoryId: Int!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Delivery {
-  """Delivery address"""
-  address: String!
+  """City"""
+  city: String!
 
-  """Delivery date"""
-  deliveryDate: String
+  """Creation date"""
+  created_at: DateTime!
+
+  """Delivery address"""
+  delivery_address: String!
+
+  """Delivery cost"""
+  delivery_cost: Float!
+
+  """Delivery person name"""
+  delivery_person: String
+
+  """Estimated delivery time"""
+  estimated_time: DateTime
 
   """Delivery ID"""
-  id: Int!
+  id_delivery: Int!
 
-  """Order ID"""
-  orderId: Int!
+  """Product ID"""
+  id_product: Int
+
+  """Orders associated with this delivery"""
+  orders: [Order!]
 
   """Delivery status"""
   status: String!
@@ -329,73 +265,70 @@ type InventarioBajoType {
 }
 
 type Inventory {
+  """Creation date"""
+  created_at: DateTime!
+
   """Inventory ID"""
-  id: Int!
+  id_inventory: Int!
+
+  """Seller ID"""
+  id_seller: Int!
 
   """Warehouse location"""
   location: String
 
-  """Product ID"""
-  productId: Int!
+  """Seller associated with this inventory"""
+  seller: Seller
 
-  """Stock quantity"""
-  quantity: Int!
-}
-
-type Mutation {
-  createCart(createCartInput: CreateCartInput!): Cart!
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  createClient(createClientInput: CreateClientInput!): Client!
-  createDelivery(createDeliveryInput: CreateDeliveryInput!): Delivery!
-  createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
-  createOrder(createOrderInput: CreateOrderInput!): Order!
-  createPaymentMethod(createPaymentMethodInput: CreatePaymentMethodInput!): PaymentMethod!
-  createProductCart(createProductCartInput: CreateProductCartInput!): ProductCart!
-  createProductOrder(createProductOrderInput: CreateProductOrderInput!): ProductOrder!
-  createProducto(createProductoInput: CreateProductoInput!): Producto!
-  createSeller(createSellerInput: CreateSellerInput!): Seller!
-  createSubcategoryProduct(createSubcategoryProductInput: CreateSubcategoryProductInput!): SubcategoryProduct!
-  removeCart(id: Int!): Cart!
-  removeCategory(id: Int!): Category!
-  removeClient(id: Int!): Client!
-  removeDelivery(id: Int!): Delivery!
-  removeInventory(id: Int!): Inventory!
-  removeOrder(id: Int!): Order!
-  removePaymentMethod(id: Int!): PaymentMethod!
-  removeProductCart(id: Int!): ProductCart!
-  removeProductOrder(id: Int!): ProductOrder!
-  removeProducto(id: Int!): Producto!
-  removeSeller(id: Int!): Seller!
-  removeSubcategoryProduct(id: Int!): SubcategoryProduct!
-  updateCart(updateCartInput: UpdateCartInput!): Cart!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  updateClient(updateClientInput: UpdateClientInput!): Client!
-  updateDelivery(updateDeliveryInput: UpdateDeliveryInput!): Delivery!
-  updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
-  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  updatePaymentMethod(updatePaymentMethodInput: UpdatePaymentMethodInput!): PaymentMethod!
-  updateProductCart(updateProductCartInput: UpdateProductCartInput!): ProductCart!
-  updateProductOrder(updateProductOrderInput: UpdateProductOrderInput!): ProductOrder!
-  updateProducto(updateProductoInput: UpdateProductoInput!): Producto!
-  updateSeller(updateSellerInput: UpdateSellerInput!): Seller!
-  updateSubcategoryProduct(updateSubcategoryProductInput: UpdateSubcategoryProductInput!): SubcategoryProduct!
+  """Total stock quantity"""
+  stock_total: Int!
 }
 
 type Order {
-  """Client ID"""
-  clientId: Int!
+  """Cart associated with this order"""
+  cart: Cart
 
-  """Order date"""
-  date: String!
+  """Client associated with this order"""
+  client: Client
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Delivery information"""
+  delivery: Delivery
+
+  """Delivery date"""
+  delivery_date: String
+
+  """Cart ID"""
+  id_cart: Int
+
+  """Client ID"""
+  id_client: Int!
+
+  """Delivery ID"""
+  id_delivery: Int
 
   """Order ID"""
-  id: Int!
+  id_order: Int!
+
+  """Payment Method ID"""
+  id_payment_method: Int!
+
+  """Order date"""
+  order_date: DateTime!
+
+  """Payment method used"""
+  paymentMethod: PaymentMethod
+
+  """Products in this order"""
+  productOrders: [ProductOrder!]
 
   """Order status"""
   status: String!
 
-  """Order total"""
-  total: Float!
+  """Total amount"""
+  total_amount: Float!
 }
 
 type PaginatedProducts {
@@ -413,28 +346,37 @@ type PaginationMeta {
 }
 
 type PaymentMethod {
-  """Payment method description"""
-  description: String
+  """Payment details"""
+  details_payment: String
 
   """Payment method ID"""
-  id: Int!
-
-  """Is active"""
-  isActive: Boolean!
+  id_payment_method: Int!
 
   """Payment method name"""
-  name: String!
+  method_name: String!
+
+  """Orders using this payment method"""
+  orders: [Order!]
 }
 
 type ProductCart {
-  """Cart ID"""
-  cartId: Int!
+  """Date when product was added to cart"""
+  added_at: DateTime!
 
-  """Product Cart ID"""
-  id: Int!
+  """Cart associated with this product"""
+  cart: Cart
+
+  """Cart ID"""
+  id_cart: Int!
 
   """Product ID"""
-  productId: Int!
+  id_product: Int!
+
+  """Product Cart ID"""
+  id_product_cart: Int!
+
+  """Product in the cart"""
+  product: Producto
 
   """Quantity"""
   quantity: Int!
@@ -461,16 +403,53 @@ type ProductOrder {
 }
 
 type Producto {
-  created_at: String!
+  """Category of this product"""
+  category: Category
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Product description"""
   description: String
+
+  """Category ID"""
   id_category: Int
+
+  """Product ID"""
   id_product: Int!
+
+  """Seller ID"""
   id_seller: Int
+
+  """SubCategory ID"""
   id_sub_category: Int
+
+  """Product photo URL"""
   photo: String
+
+  """Product price"""
   price: Float!
+
+  """Carts containing this product"""
+  productCarts: [ProductCart!]
+
+  """Orders containing this product"""
+  productOrders: [ProductOrder!]
+
+  """Product name"""
   product_name: String!
+
+  """Seller of this product"""
+  seller: Seller
+
+  """Available stock"""
   stock: Int!
+
+  """SubCategory of this product"""
+  subCategory: SubCategory
+
+  """Subcategory associations"""
+  subcategoryProducts: [SubcategoryProduct!]
 }
 
 type ProductosMasVendidosType {
@@ -497,6 +476,12 @@ type ProductosMasVendidosType {
 }
 
 type Query {
+  """Get an admin by ID"""
+  admin(id: Int!): Admin!
+
+  """Get all admins"""
+  admins: [Admin!]!
+
   """
   Búsqueda avanzada de productos con múltiples criterios: texto, categoría, vendedor, rangos de precio y stock, con ordenamiento y paginación
   """
@@ -564,6 +549,15 @@ type Query {
   rendimientoCategorias: [RendimientoCategoriasType!]!
   seller(id: Int!): Seller!
   sellers: [Seller!]!
+
+  """Get all subcategories"""
+  subCategories: [SubCategory!]!
+
+  """Get subcategories by category ID"""
+  subCategoriesByCategory(categoryId: Int!): [SubCategory!]!
+
+  """Get a subcategory by ID"""
+  subCategory(id: Int!): SubCategory!
   subcategoryProduct(id: Int!): SubcategoryProduct!
   subcategoryProducts: [SubcategoryProduct!]!
   subcategoryProductsByProduct(productId: Int!): [SubcategoryProduct!]!
@@ -610,177 +604,69 @@ type RendimientoCategoriasType {
 }
 
 type Seller {
-  """Business name"""
-  businessName: String
+  """Creation date"""
+  created_at: DateTime!
+
+  """Seller description"""
+  description: String
 
   """Seller email"""
-  email: String!
+  email: String
 
   """Seller ID"""
-  id: Int!
+  id_seller: Int!
 
-  """Seller name"""
-  name: String!
+  """Inventories managed by this seller"""
+  inventories: [Inventory!]
 
   """Seller phone"""
   phone: String
+
+  """Products sold by this seller"""
+  products: [Producto!]
+
+  """Seller name"""
+  seller_name: String!
+}
+
+type SubCategory {
+  """Related category"""
+  category: Category
+
+  """SubCategory description"""
+  description: String
+
+  """Category ID"""
+  id_category: Int!
+
+  """SubCategory ID"""
+  id_sub_category: Int!
+
+  """SubCategory name"""
+  sub_category_name: String!
+
+  """Products in this subcategory"""
+  subcategoryproducts: [SubcategoryProduct!]
 }
 
 type SubcategoryProduct {
-  """Created at"""
-  createdAt: String
+  """Creation date"""
+  created_at: DateTime!
+
+  """Product ID"""
+  id_product: Int!
+
+  """Subcategory ID"""
+  id_subcategory: Int!
 
   """Subcategory Product ID"""
-  id: Int!
+  id_subcategory_product: Int!
 
-  """Product ID"""
-  productId: Int!
+  """Product associated"""
+  product: Producto
 
-  """Subcategory ID"""
-  subcategoryId: Int!
-}
-
-input UpdateCartInput {
-  """Client ID"""
-  clientId: Int
-  id: Int!
-
-  """Cart status"""
-  status: String
-}
-
-input UpdateCategoryInput {
-  """Category name"""
-  category_name: String
-
-  """Category description"""
-  description: String
-  id: Int!
-}
-
-input UpdateClientInput {
-  address: String
-  email: String
-  id: Int!
-  name: String
-  phone: String
-}
-
-input UpdateDeliveryInput {
-  """Delivery address"""
-  address: String
-
-  """Delivery date"""
-  deliveryDate: String
-  id: Int!
-
-  """Order ID"""
-  orderId: Int
-
-  """Delivery status"""
-  status: String
-}
-
-input UpdateInventoryInput {
-  id: Int!
-
-  """Warehouse location"""
-  location: String
-
-  """Product ID"""
-  productId: Int
-
-  """Stock quantity"""
-  quantity: Int
-}
-
-input UpdateOrderInput {
-  """Client ID"""
-  clientId: Int
-  id: Int!
-
-  """Order status"""
-  status: String
-
-  """Order total"""
-  total: Float
-}
-
-input UpdatePaymentMethodInput {
-  """Payment method description"""
-  description: String
-  id: Int!
-
-  """Is active"""
-  isActive: Boolean = true
-
-  """Payment method name"""
-  name: String
-}
-
-input UpdateProductCartInput {
-  """Cart ID"""
-  cartId: Int
-  id: Int!
-
-  """Product ID"""
-  productId: Int
-
-  """Quantity"""
-  quantity: Int
-}
-
-input UpdateProductOrderInput {
-  id: Int!
-
-  """Order ID"""
-  orderId: Int
-
-  """Product ID"""
-  productId: Int
-
-  """Quantity"""
-  quantity: Int
-
-  """Unit price"""
-  unitPrice: Float
-}
-
-input UpdateProductoInput {
-  description: String
-  id: Int!
-  id_category: Int
-  id_seller: Int
-  id_sub_category: Int
-  photo: String
-  price: Float
-  product_name: String
-  stock: Int = 0
-}
-
-input UpdateSellerInput {
-  """Business name"""
-  businessName: String
-
-  """Seller email"""
-  email: String
-  id: Int!
-
-  """Seller name"""
-  name: String
-
-  """Seller phone"""
-  phone: String
-}
-
-input UpdateSubcategoryProductInput {
-  id: Int!
-
-  """Product ID"""
-  productId: Int
-
-  """Subcategory ID"""
-  subcategoryId: Int
+  """Subcategory associated"""
+  subcategory: SubCategory
 }
 
 type VendedorConProductosType {

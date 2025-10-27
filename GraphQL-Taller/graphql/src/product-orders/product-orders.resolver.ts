@@ -8,11 +8,6 @@ import { UpdateProductOrderInput } from './dto/update-product-order.input';
 export class ProductOrdersResolver {
   constructor(private readonly productOrdersService: ProductOrdersService) {}
 
-  @Mutation(() => ProductOrder)
-  createProductOrder(@Args('createProductOrderInput') createProductOrderInput: CreateProductOrderInput) {
-    return this.productOrdersService.create(createProductOrderInput);
-  }
-
   @Query(() => [ProductOrder], { name: 'productOrders' })
   findAll() {
     return this.productOrdersService.findAll();
@@ -26,15 +21,5 @@ export class ProductOrdersResolver {
   @Query(() => [ProductOrder], { name: 'productOrdersByOrder' })
   findByOrder(@Args('orderId', { type: () => Int }) orderId: number) {
     return this.productOrdersService.findByOrder(orderId);
-  }
-
-  @Mutation(() => ProductOrder)
-  updateProductOrder(@Args('updateProductOrderInput') updateProductOrderInput: UpdateProductOrderInput) {
-    return this.productOrdersService.update(updateProductOrderInput.id, updateProductOrderInput);
-  }
-
-  @Mutation(() => ProductOrder)
-  removeProductOrder(@Args('id', { type: () => Int }) id: number) {
-    return this.productOrdersService.remove(id);
   }
 }

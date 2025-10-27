@@ -1,17 +1,15 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { SubcategoryProductsService } from './subcategory-products.service';
 import { SubcategoryProduct } from './entities/subcategory-product.entity';
 import { CreateSubcategoryProductInput } from './dto/create-subcategory-product.input';
 import { UpdateSubcategoryProductInput } from './dto/update-subcategory-product.input';
+import { Producto } from '../productos/entities/producto.entity';
+import { SubCategory } from '../subcategories/entities/subcategory.entity';
+import axios from 'axios';
 
 @Resolver(() => SubcategoryProduct)
 export class SubcategoryProductsResolver {
   constructor(private readonly subcategoryProductsService: SubcategoryProductsService) {}
-
-  @Mutation(() => SubcategoryProduct)
-  createSubcategoryProduct(@Args('createSubcategoryProductInput') createSubcategoryProductInput: CreateSubcategoryProductInput) {
-    return this.subcategoryProductsService.create(createSubcategoryProductInput);
-  }
 
   @Query(() => [SubcategoryProduct], { name: 'subcategoryProducts' })
   findAll() {
@@ -33,13 +31,41 @@ export class SubcategoryProductsResolver {
     return this.subcategoryProductsService.findByProduct(productId);
   }
 
-  @Mutation(() => SubcategoryProduct)
-  updateSubcategoryProduct(@Args('updateSubcategoryProductInput') updateSubcategoryProductInput: UpdateSubcategoryProductInput) {
-    return this.subcategoryProductsService.update(updateSubcategoryProductInput.id, updateSubcategoryProductInput);
+  @ResolveField(() => Producto, { nullable: true })
+  async product(@Parent() subcategoryProduct: SubcategoryProduct): Promise<Producto | null> {
+    try {
+      const response = await axios.get(`http://localhost:3006/api/v1/products/${subcategoryProduct.id_product}`);
+      return {
+        id_product: response.data.id_product,
+        id_seller: response.data.id_seller,
+        id_category: response.data.id_category,
+        id_sub_category: response.data.id_sub_category,
+        product_name: response.data.product_name,
+        description: response.data.description,
+        price: response.data.price,
+        stock: response.data.stock,
+        photo: response.data.photo,
+        created_at: response.data.created_at ? new Date(response.data.created_at) : null,
+      };
+    } catch (error) {
+      console.error(`❌ Error fetching product for subcategory-product #${subcategoryProduct.id_subcategory_product}:`, error.response?.data);
+      return null;
+    }
   }
 
-  @Mutation(() => SubcategoryProduct)
-  removeSubcategoryProduct(@Args('id', { type: () => Int }) id: number) {
-    return this.subcategoryProductsService.remove(id);
+  @ResolveField(() => SubCategory, { nullable: true })
+  async subcategory(@Parent() subcategoryProduct: SubcategoryProduct): Promise<SubCategory | null> {
+    try {
+      const response = await axios.get(`http://localhost:3006/api/v1/subcategories/${subcategoryProduct.id_subcategory}`);
+      return {
+        id_sub_category: response.data.id_sub_category,
+        sub_category_name: response.data.sub_category_name,
+        description: response.data.description,
+        id_category: response.data.id_category,
+      };
+    } catch (error) {
+      console.error(`❌ Error fetching subcategory for subcategory-product #${subcategoryProduct.id_subcategory_product}:`, error.response?.data);
+      return null;
+    }
   }
 }

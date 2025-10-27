@@ -17,7 +17,7 @@ async function bootstrap() {
   // Establecer prefijo global para las rutas
   app.setGlobalPrefix('api/v1');
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3006);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

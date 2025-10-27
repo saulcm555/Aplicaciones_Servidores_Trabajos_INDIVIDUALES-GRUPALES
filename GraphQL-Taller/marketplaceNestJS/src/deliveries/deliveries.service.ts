@@ -37,10 +37,11 @@ export class DeliveriesService {
   }
 
   async findByOrder(orderId: number): Promise<Delivery[]> {
-    const deliveries = await this.deliveryRepository.find({
-      where: { orders: { id_order: orderId } },
-      relations: ['orders'],
-    });
+    const deliveries = await this.deliveryRepository
+      .createQueryBuilder('delivery')
+      .leftJoinAndSelect('delivery.orders', 'order')
+      .where('order.id_order = :orderId', { orderId })
+      .getMany();
     
     return deliveries;
   }

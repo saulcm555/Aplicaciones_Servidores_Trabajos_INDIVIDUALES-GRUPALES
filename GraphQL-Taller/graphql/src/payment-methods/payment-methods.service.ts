@@ -5,7 +5,7 @@ import axios from 'axios';
 
 @Injectable()
 export class PaymentMethodsService {
-  private readonly REST_API_URL = 'http://localhost:3000/api/v1/payment-methods';
+  private readonly REST_API_URL = 'http://localhost:3006/api/v1/payment-methods';
 
   async create(createPaymentMethodInput: CreatePaymentMethodInput) {
     try {
@@ -19,7 +19,19 @@ export class PaymentMethodsService {
   async findAll() {
     try {
       const response = await axios.get(this.REST_API_URL);
-      return response.data;
+      let paymentMethods = [];
+      
+      if (response.data && Array.isArray(response.data.data)) {
+        paymentMethods = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        paymentMethods = response.data;
+      }
+
+      return paymentMethods.map(pm => ({
+        id_payment_method: pm.id_payment_method,
+        method_name: pm.method_name,
+        details_payment: pm.details_payment,
+      }));
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error fetching payment methods', error.response?.status || 500);
     }
@@ -28,7 +40,11 @@ export class PaymentMethodsService {
   async findOne(id: number) {
     try {
       const response = await axios.get(`${this.REST_API_URL}/${id}`);
-      return response.data;
+      return {
+        id_payment_method: response.data.id_payment_method,
+        method_name: response.data.method_name,
+        details_payment: response.data.details_payment,
+      };
     } catch (error) {
       throw new HttpException(error.response?.data || `Payment method #${id} not found`, error.response?.status || 404);
     }
@@ -36,7 +52,8 @@ export class PaymentMethodsService {
 
   async update(id: number, updatePaymentMethodInput: UpdatePaymentMethodInput) {
     try {
-      const response = await axios.patch(`${this.REST_API_URL}/${id}`, updatePaymentMethodInput);
+      const { id: _, ...payload } = updatePaymentMethodInput;
+      const response = await axios.patch(`${this.REST_API_URL}/${id}`, payload);
       return response.data;
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error updating payment method', error.response?.status || 500);
@@ -45,8 +62,9 @@ export class PaymentMethodsService {
 
   async remove(id: number) {
     try {
-      const response = await axios.delete(`${this.REST_API_URL}/${id}`);
-      return response.data;
+      const paymentMethod = await this.findOne(id);
+      await axios.delete(`${this.REST_API_URL}/${id}`);
+      return paymentMethod;
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error deleting payment method', error.response?.status || 500);
     }

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 @Injectable()
 export class CartsService {
-  private readonly REST_API_URL = 'http://localhost:3000/api/v1/carts';
+  private readonly REST_API_URL = 'http://localhost:3006/api/v1/carts';
 
   async create(createCartInput: CreateCartInput) {
     try {
@@ -19,7 +19,10 @@ export class CartsService {
   async findAll() {
     try {
       const response = await axios.get(this.REST_API_URL);
-      return response.data;
+      if (response.data && Array.isArray(response.data.data)) {
+        return response.data.data;
+      }
+      return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error fetching carts', error.response?.status || 500);
     }
@@ -36,7 +39,8 @@ export class CartsService {
 
   async update(id: number, updateCartInput: UpdateCartInput) {
     try {
-      const response = await axios.patch(`${this.REST_API_URL}/${id}`, updateCartInput);
+      const { id: _, ...payload } = updateCartInput;
+      const response = await axios.patch(`${this.REST_API_URL}/${id}`, payload);
       return response.data;
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error updating cart', error.response?.status || 500);
@@ -45,8 +49,9 @@ export class CartsService {
 
   async remove(id: number) {
     try {
-      const response = await axios.delete(`${this.REST_API_URL}/${id}`);
-      return response.data;
+      const cart = await this.findOne(id);
+      await axios.delete(`${this.REST_API_URL}/${id}`);
+      return cart;
     } catch (error) {
       throw new HttpException(error.response?.data || 'Error deleting cart', error.response?.status || 500);
     }

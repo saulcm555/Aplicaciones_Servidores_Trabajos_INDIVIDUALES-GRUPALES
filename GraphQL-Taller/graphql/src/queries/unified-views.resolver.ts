@@ -19,7 +19,7 @@ import { Order } from '../orders/entities/order.entity';
  */
 @Resolver()
 export class UnifiedViewsResolver {
-  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3000';
+  private readonly REST_API_URL = process.env.REST_API_URL || 'http://localhost:3006';
 
   constructor(
     @Inject(HttpService)
@@ -61,9 +61,9 @@ export class UnifiedViewsResolver {
     );
 
     // 4. Agrupar productos por vendedor y calcular estadísticas
-    const vendedoresData = sellers.map((seller) => {
+    const vendedoresData = sellers.map((seller: any) => {
       const productosVendedor = products.filter(
-        (p) => p.id_seller === seller.id,
+        (p) => p.id_seller === seller.id_seller,
       );
 
       const categoriaSet = new Set(
@@ -84,8 +84,8 @@ export class UnifiedViewsResolver {
           : 0;
 
       return {
-        idVendedor: seller.id,
-        nombreVendedor: seller.name,
+        idVendedor: seller.id_seller,
+        nombreVendedor: seller.seller_name,
         email: seller.email,
         totalProductos: productosVendedor.length,
         valorInventario: parseFloat(valorInventario.toFixed(2)),
@@ -120,12 +120,12 @@ export class UnifiedViewsResolver {
 
     // 2. Obtener vendedores
     const response_sellers = await firstValueFrom(
-      this.httpService.get<Seller[]>(`${this.REST_API_URL}/api/v1/sellers`),
+      this.httpService.get<any[]>(`${this.REST_API_URL}/api/v1/sellers`),
     );
     const sellers = response_sellers.data;
 
     // Crear mapa de vendedores
-    const sellerMap = new Map(sellers.map((s) => [s.id, s.name]));
+    const sellerMap = new Map(sellers.map((s: any) => [s.id_seller, s.seller_name]));
 
     // 3. Filtrar productos con stock bajo
     const productosBajos = products
@@ -172,24 +172,25 @@ export class UnifiedViewsResolver {
     @Args('comprasMinimas', { type: () => Number, nullable: true, defaultValue: 1 })
     comprasMinimas: number,
   ): Promise<ClienteConComprasType[]> {
-    // 1. Obtener clientes
-    const response_clients = await firstValueFrom(
-      this.httpService.get<Client[]>(`${this.REST_API_URL}/api/v1/clients`),
-    );
-    const clients = response_clients.data;
+    try {
+      // 1. Obtener clientes
+      const response_clients = await firstValueFrom(
+        this.httpService.get<any[]>(`${this.REST_API_URL}/api/v1/clients`),
+      );
+      const clients = response_clients.data;
 
-    // 2. Obtener órdenes
-    const response_orders = await firstValueFrom(
-      this.httpService.get<Order[]>(`${this.REST_API_URL}/api/v1/orders`),
-    );
-    const orders = response_orders.data;
+      // 2. Obtener órdenes
+      const response_orders = await firstValueFrom(
+        this.httpService.get<any[]>(`${this.REST_API_URL}/api/v1/orders`),
+      );
+      const orders = response_orders.data;
 
-    // 3. Agrupar órdenes por cliente y calcular estadísticas
-    const clientesData = clients.map((client) => {
-      const ordenesCliente = orders.filter((o) => o.clientId === client.id_client);
+      // 3. Agrupar órdenes por cliente y calcular estadísticas
+      const clientesData = clients.map((client: any) => {
+        const ordenesCliente = orders.filter((o: any) => o.id_client === client.id_client);
 
       const totalGastado = ordenesCliente.reduce(
-        (sum, o) => sum + (o.total || 0),
+        (sum, o) => sum + (o.total_amount || 0),
         0,
       );
 
@@ -217,8 +218,8 @@ export class UnifiedViewsResolver {
 
       return {
         idCliente: client.id_client,
-        nombre: client.name,
-        email: client.email,
+        nombre: client.client_name || client.name,
+        email: client.client_email || client.email,
         totalOrdenes: ordenesCliente.length,
         totalGastado: parseFloat(totalGastado.toFixed(2)),
         gastoPorOrden: parseFloat(gastoPorOrden.toFixed(2)),
@@ -227,9 +228,13 @@ export class UnifiedViewsResolver {
       };
     });
 
-    // Filtrar por compras mínimas y ordenar por total gastado
-    return clientesData
-      .filter((c) => c.totalOrdenes >= comprasMinimas)
-      .sort((a, b) => b.totalGastado - a.totalGastado);
+      // Filtrar por compras mínimas y ordenar por total gastado
+      return clientesData
+        .filter((c) => c.totalOrdenes >= comprasMinimas)
+        .sort((a, b) => b.totalGastado - a.totalGastado);
+    } catch (error) {
+      console.error('Error en clientesConHistorialCompras:', error);
+      throw new Error('No se pudo obtener el historial de compras de clientes. Verifica que el endpoint /api/v1/clients esté funcionando correctamente.');
+    }
   }
 }
