@@ -9,9 +9,6 @@ type Admin {
   """Admin name"""
   admin_name: String!
 
-  """Admin password (hashed)"""
-  admin_password: String!
-
   """Creation date"""
   created_at: DateTime!
 
@@ -22,7 +19,7 @@ type Admin {
   role: String
 
   """Updated date"""
-  updated_at: DateTime!
+  updated_at: DateTime
 }
 
 type Cart {

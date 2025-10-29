@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus 
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
 import { UpdateSubCategoryDto } from './dto/update-sub-category.dto';
 
+@ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -24,21 +26,26 @@ export class CategoriesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear una nueva categoría' })
+  @ApiResponse({ status: 201, description: 'Categoría creada exitosamente' })
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Obtener todas las categorías' })
   findAll() {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Obtener una categoría por ID' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar una categoría' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -48,6 +55,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Eliminar una categoría' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.remove(id);
   }
@@ -56,6 +64,7 @@ export class CategoriesController {
 
   // Obtener subcategorías de una categoría específica
   @Get(':categoryId/sub-categories')
+  @ApiOperation({ summary: 'Obtener subcategorías de una categoría' })
   findSubCategoriesByCategory(@Param('categoryId', ParseIntPipe) categoryId: number) {
     return this.categoriesService.findSubCategoriesByCategory(categoryId);
   }
@@ -63,6 +72,8 @@ export class CategoriesController {
   // Crear una subcategoría para una categoría específica
   @Post(':categoryId/sub-categories')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear una subcategoría para una categoría' })
+  @ApiResponse({ status: 201, description: 'Subcategoría creada exitosamente' })
   createSubCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Body() createSubCategoryDto: CreateSubCategoryDto,
@@ -74,6 +85,7 @@ export class CategoriesController {
 
   // Obtener una subcategoría específica de una categoría
   @Get(':categoryId/sub-categories/:subCategoryId')
+  @ApiOperation({ summary: 'Obtener una subcategoría por ID' })
   findOneSubCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Param('subCategoryId', ParseIntPipe) subCategoryId: number,
@@ -84,6 +96,7 @@ export class CategoriesController {
 
   // Actualizar una subcategoría de una categoría
   @Patch(':categoryId/sub-categories/:subCategoryId')
+  @ApiOperation({ summary: 'Actualizar una subcategoría' })
   updateSubCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Param('subCategoryId', ParseIntPipe) subCategoryId: number,
@@ -99,6 +112,7 @@ export class CategoriesController {
   // Eliminar una subcategoría de una categoría
   @Delete(':categoryId/sub-categories/:subCategoryId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Eliminar una subcategoría' })
   removeSubCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Param('subCategoryId', ParseIntPipe) subCategoryId: number,

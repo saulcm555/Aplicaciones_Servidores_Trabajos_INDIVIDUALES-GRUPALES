@@ -13,8 +13,10 @@ export class Admin {
   @IsEmail()
   admin_email: string;
 
-  @Field({ description: 'Admin password (hashed)' })
-  admin_password: string;
+  // ⚠️ Password NO debe exponerse en queries públicas por seguridad
+  // Solo se usa internamente para autenticación
+  // @Field({ nullable: true, description: 'Admin password (hashed)' })
+  // admin_password?: string;
 
   @Field({ nullable: true, description: 'Admin role' })
   role?: string;
@@ -22,6 +24,6 @@ export class Admin {
   @Field(() => GraphQLISODateTime, { description: 'Creation date' })
   created_at: Date;
 
-  @Field(() => GraphQLISODateTime, { description: 'Updated date' })
-  updated_at: Date;
+  @Field(() => GraphQLISODateTime, { nullable: true, description: 'Updated date' })
+  updated_at?: Date;
 }

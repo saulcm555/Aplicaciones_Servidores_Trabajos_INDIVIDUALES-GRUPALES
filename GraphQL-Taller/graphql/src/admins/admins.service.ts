@@ -22,9 +22,10 @@ export class AdminsService {
         id_admin: admin.id_admin,
         admin_name: admin.admin_name,
         admin_email: admin.admin_email,
-        admin_password: admin.admin_password,
+        // admin_password omitido por seguridad (no se expone en GraphQL)
         role: admin.role,
         created_at: new Date(admin.created_at),
+        updated_at: admin.updated_at ? new Date(admin.updated_at) : null,
       }));
     } catch (error) {
       console.error('❌ Error fetching admins:', error.response?.data);
@@ -44,9 +45,10 @@ export class AdminsService {
         id_admin: response.data.id_admin,
         admin_name: response.data.admin_name,
         admin_email: response.data.admin_email,
-        admin_password: response.data.admin_password,
+        // admin_password omitido por seguridad (no se expone en GraphQL)
         role: response.data.role,
         created_at: new Date(response.data.created_at),
+        updated_at: response.data.updated_at ? new Date(response.data.updated_at) : null,
       };
     } catch (error) {
       console.error(`❌ Error fetching admin #${id}:`, error.response?.data);
