@@ -1,0 +1,233 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "eventos",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "32f94362-f729-4028-b2ad-314c4984e191",
+      "name": "Webhook",
+      "webhookId": "7e66356b-f706-4dbb-b032-9cebd3901713"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"={{ $json.statusCode }}\",\n  \"message\": \"={{ $json.message }}\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1344,
+        -16
+      ],
+      "id": "4ec620ef-1aad-4e61-8010-5912d997409e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "582367bf-8d11-450b-91cf-ff9af11d0d4c",
+              "leftValue": "={{ $json.body.evento }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "28f76f20-4658-4e12-8ce5-58dceecf8262",
+              "leftValue": "={{ $json.body.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        224
+      ],
+      "id": "b5573394-c270-47f6-95f3-e6c0249901ab",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyBe6qGzWNPJ6SnUl1B1FrnQC-v2xkSJeI4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Genera un mensaje breve y profesional notificando que se recibió el evento: {{ $json.body.evento }}. Menciona que tiene order ID: {{ $json.body.data.orderId }} y total: {{ $json.body.data.total }}. Hazlo amigable en español, máximo 2 líneas.\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        -80
+      ],
+      "id": "43676fa0-4496-4890-97c4-cf2d31fc2b80",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6c2d81c8-d5f0-41b3-9da6-33414194d18a",
+              "name": "mensaje",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        -80
+      ],
+      "id": "e8a4c68a-af77-490c-81ff-758114521cae",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "8004118438",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        -80
+      ],
+      "id": "a50dc5d2-a543-44e7-9247-9c67b38cd185",
+      "name": "Send a text message",
+      "webhookId": "d739dda3-7e22-4b94-8daf-19f1a0e7d899",
+      "credentials": {
+        "telegramApi": {
+          "id": "uF5X4mt3R18OjYwc",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "a5084dea-56a7-43e4-8982-72dcb42e1c96",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b45ae4ba5084ea68e56775891bc89dcd760accc23082f94746f7ea39cc138fb"
+  },
+  "id": "w6eVx29nD--209UOYuA-4",
+  "tags": []
+}
