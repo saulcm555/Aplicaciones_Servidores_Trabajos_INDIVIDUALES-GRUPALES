@@ -1,0 +1,196 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "eventos",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "32f94362-f729-4028-b2ad-314c4984e191",
+      "name": "Webhook",
+      "webhookId": "7e66356b-f706-4dbb-b032-9cebd3901713"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"={{ $json.statusCode }}\",\n  \"message\": \"={{ $json.message }}\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        800,
+        -128
+      ],
+      "id": "4ec620ef-1aad-4e61-8010-5912d997409e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "582367bf-8d11-450b-91cf-ff9af11d0d4c",
+              "leftValue": "={{ $json.body.evento }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "28f76f20-4658-4e12-8ce5-58dceecf8262",
+              "leftValue": "={{ $json.body.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        304,
+        16
+      ],
+      "id": "b5573394-c270-47f6-95f3-e6c0249901ab",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c61f59bd-1d9a-43fe-8556-12160df0e2bb",
+              "name": "statusCode",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "ea995cb0-e986-4764-aff9-7074a034787b",
+              "name": "message",
+              "value": "Evento recibido correctamente",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        -112
+      ],
+      "id": "4eb45a8f-cdf0-4889-b75b-436079ed6261",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "823af6c8-5370-45f2-b330-31be0b83655e",
+              "name": "statusCode",
+              "value": 400,
+              "type": "number"
+            },
+            {
+              "id": "e84128b3-e4cf-4dd6-82a9-d6eb466beecf",
+              "name": "message",
+              "value": "Error: Datos incompletos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        112
+      ],
+      "id": "896b01c2-bb01-4e48-8802-c17673bfa3c6",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "2e24290d-867a-441a-a5cb-87e72edcfe91",
+  "meta": {
+    "instanceId": "2b45ae4ba5084ea68e56775891bc89dcd760accc23082f94746f7ea39cc138fb"
+  },
+  "id": "w6eVx29nD--209UOYuA-4",
+  "tags": []
+}
